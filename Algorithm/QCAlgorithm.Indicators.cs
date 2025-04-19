@@ -2829,6 +2829,24 @@ namespace QuantConnect.Algorithm
         }
 
         /// <summary>
+        /// Creates a AnchoredVolumeWeightedAveragePrice indicator for the specified symbol, with adjustable sensitivity and minimum trend length.
+        /// </summary>
+        /// <param name="symbol">The symbol for which to create the AnchoredVolumeWeightedAveragePrice indicator.</param>
+        /// <param name="anchor">The time which to calculate the AVWAP from</param>
+        /// <param name="resolution">The resolution</param>
+        /// <param name="selector">Selects a value from the BaseData to send into the indicator, if null defaults to casting the input value to a TradeBar</param>
+        /// <returns>The configured AnchoredVolumeWeightedAveragePrice indicator.</returns>
+        [DocumentationAttribute(Indicators)]
+        public AnchoredVolumeWeightedAveragePrice AVWAP(Symbol symbol, DateTime anchor, Resolution? resolution = null, Func<IBaseData, TradeBar> selector = null)
+        {
+            var name = CreateIndicatorName(symbol, $"AVWAP({anchor:yyyyMMddHHmmss})", null);
+            var AnchoredVolumeWeightedAveragePrice = new AnchoredVolumeWeightedAveragePrice(name, anchor);
+            InitializeIndicator(AnchoredVolumeWeightedAveragePrice, resolution, selector, symbol);
+            return AnchoredVolumeWeightedAveragePrice;
+        }
+
+
+        /// <summary>
         /// Creates a new name for an indicator created with the convenience functions (SMA, EMA, ect...)
         /// </summary>
         /// <param name="symbol">The symbol this indicator is registered to</param>
