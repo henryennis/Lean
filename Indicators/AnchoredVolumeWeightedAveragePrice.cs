@@ -24,7 +24,7 @@ namespace QuantConnect.Indicators
         /// <summary>
         /// True when at least one trade/bar since anchor has been processed.
         /// </summary>
-        public override bool IsReady => _sumVolume > 0;
+        public override bool IsReady => Samples >= WarmUpPeriod;
 
         /// <summary>
         /// No pre‐warmup required beyond the first valid sample.
@@ -67,6 +67,7 @@ namespace QuantConnect.Indicators
         {
             if (input == null || input.EndTime < _anchor)
             {
+                //Returns a value for the end user but does nothing to the sum
                 return new IndicatorResult(0m, IndicatorStatus.InvalidInput);
             }
 
@@ -81,7 +82,7 @@ namespace QuantConnect.Indicators
             if (_sumVolume == 0m)
             {
                 // fallback to last price if no volume
-                return new IndicatorResult(input.Value, IndicatorStatus.MathError);
+                return new IndicatorResult(0, IndicatorStatus.MathError);
             }
 
             return new IndicatorResult(_sumPriceVolume / _sumVolume, IndicatorStatus.Success);
